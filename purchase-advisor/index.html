@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Advisor | Smart Spending Decisions</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <h1>Purchase Advisor</h1>
+                <p>Smart Spending Decisions</p>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Purchase Information Section -->
+            <div class="card active" id="purchase-info">
+                <div class="card-header">
+                    <h2>Purchase Information</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="item">What do you want to buy?</label>
+                        <input type="text" id="item" placeholder="Enter item name..." class="soft-input">
+                    </div>
+                    <button class="btn-primary" onclick="nextSection('financial-details')">Continue</button>
+                </div>
+            </div>
+
+            <!-- Financial Details Section -->
+            <div class="card" id="financial-details">
+                <div class="card-header">
+                    <h2>Financial Details</h2>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label for="price">How much does it cost?</label>
+                        <div class="input-with-icon">
+                            <span class="currency">$</span>
+                            <input type="number" id="price" placeholder="0.00" min="0" step="0.01" class="soft-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>How often will you use it?</label>
+                        <div class="usage-options">
+                            <div class="usage-option" onclick="selectUsage(90, this)">
+                                <span class="usage-icon">📱</span>
+                                <span class="usage-text">Multiple times daily</span>
+                            </div>
+                            <div class="usage-option" onclick="selectUsage(30, this)">
+                                <span class="usage-icon">☀️</span>
+                                <span class="usage-text">Daily</span>
+                            </div>
+                            <div class="usage-option" onclick="selectUsage(15, this)">
+                                <span class="usage-icon">📅</span>
+                                <span class="usage-text">Several times weekly</span>
+                            </div>
+                            <div class="usage-option" onclick="selectUsage(4, this)">
+                                <span class="usage-icon">📆</span>
+                                <span class="usage-text">Weekly</span>
+                            </div>
+                            <div class="usage-option" onclick="selectUsage(1.5, this)">
+                                <span class="usage-icon">🌙</span>
+                                <span class="usage-text">Occasionally</span>
+                            </div>
+                            <div class="usage-option" onclick="selectUsage(0.5, this)">
+                                <span class="usage-icon">⭐</span>
+                                <span class="usage-text">Rarely</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="savings">How much do you have in savings?</label>
+                        <div class="input-with-icon">
+                            <span class="currency">$</span>
+                            <input type="number" id="savings" placeholder="0.00" min="0" step="0.01" class="soft-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="income">What's your monthly income?</label>
+                        <div class="input-with-icon">
+                            <span class="currency">$</span>
+                            <input type="number" id="income" placeholder="0.00" min="0" step="0.01" class="soft-input">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="monthly-spending">How much do you spend monthly?</label>
+                        <div class="input-with-icon">
+                            <span class="currency">$</span>
+                            <input type="number" id="monthly-spending" placeholder="0.00" min="0" step="0.01" class="soft-input">
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-secondary" onclick="prevSection('purchase-info')">Back</button>
+                        <button class="btn-primary" onclick="analyzePurchase()">Analyze Purchase</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Analysis Section -->
+            <div class="card" id="analysis">
+                <div class="card-header">
+                    <h2>Analysis Progress</h2>
+                </div>
+                <div class="card-body">
+                    <div class="progress-container">
+                        <div class="progress-step">
+                            <div class="progress-text">Analyzing your finances</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-1"></div>
+                            </div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="progress-text">Checking purchase value</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-2"></div>
+                            </div>
+                        </div>
+                        <div class="progress-step">
+                            <div class="progress-text">Evaluating monthly budget</div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="progress-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="card" id="results">
+                <div class="card-header">
+                    <h2>Purchase Analysis Results</h2>
+                </div>
+                <div class="card-body">
+                    <div class="result-header">
+                        <div class="score-circle" id="score-circle">
+                            <span class="score-value" id="score-value">0%</span>
+                            <span class="score-label">Smart Score</span>
+                        </div>
+                        <div class="result-summary">
+                            <h3 id="result-title">Analyzing...</h3>
+                            <p id="result-description"></p>
+                        </div>
+                    </div>
+
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <span class="detail-label">Item:</span>
+                            <span class="detail-value" id="result-item"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Cost:</span>
+                            <span class="detail-value" id="result-cost"></span>
+                        </div>
+                        <div class="detail-item">
+                            <span class="detail-label">Usage:</span>
+                            <span class="detail-value" id="result-usage"></span>
+                        </div>
+                    </div>
+
+                    <div class="financial-impact">
+                        <h4>Financial Impact</h4>
+                        <div class="impact-grid">
+                            <div class="impact-item">
+                                <span class="impact-value" id="remaining-savings"></span>
+                                <span class="impact-label">Savings after purchase</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value" id="emergency-months"></span>
+                                <span class="impact-label">Emergency fund</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value" id="cost-per-use"></span>
+                                <span class="impact-label">Cost per use</span>
+                            </div>
+                            <div class="impact-item">
+                                <span class="impact-value" id="spending-ratio"></span>
+                                <span class="impact-label">Monthly spending</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="insights">
+                        <h4>Insights</h4>
+                        <div class="insight-list" id="insight-list">
+                            <!-- Insights will be populated here -->
+                        </div>
+                    </div>
+
+                    <div class="button-group">
+                        <button class="btn-secondary" onclick="restartAnalysis()">Analyze Another</button>
+                        <button class="btn-primary" onclick="saveToHistory()">Save to History</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>Made with 💡 for smart spending decisions</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
